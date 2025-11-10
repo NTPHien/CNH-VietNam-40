@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLN122 - Đứt gãy công nghệ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .menu-top a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-top a:hover,
+        .menu-top a.active {
+            background-color: #0056b3;
+        }
+
+        .sidebar {
+            width: 300px;
+            background-color: #fff;
+            padding-top: 70px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-content {
+            padding: 20px;
+        }
+
+        .sidebar h3 {
+            color: #007bff;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar li {
+            padding: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-left: 3px solid transparent;
+            color: #333;
+        }
+
+        .sidebar li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .sidebar li.active {
+            font-weight: bold;
+            border-left-color: #007bff;
+            color: #007bff;
+        }
+
+        .content-wrapper {
+            flex-grow: 1;
+            padding-top: 70px;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: white;
+            min-height: calc(100% - 40px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .lesson-header h1 {
+            color: #007bff;
+            border-bottom: 1px solid #007bff;
+            padding-bottom: 5px;
+        }
+
+        .main-progress-container {
+            height: 10px;
+            background-color: #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: none;
+            overflow: hidden;
+            line-height: 0;
+            font-size: 0;
+        }
+
+        .main-progress {
+            height: 100%;
+            width: 0%;
+            background-color: #28a745;
+            border-radius: 5px;
+            transition: width 0.4s;
+        }
+
+        .progress-text {
+            text-align: right;
+            color: #555;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+        }
+
+        .section {
+            padding-bottom: 40px;
+        }
+
+        .section h3 {
+            color: #333;
+            margin-top: 30px;
+        }
+
+        .section h4 {
+            color: #555;
+            border-left: 3px solid #007bff;
+            padding-left: 10px;
+            margin-top: 20px;
+        }
+
+        .section ul {
+            padding-left: 20px;
+        }
+
+        .lesson-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            margin-top: 30px;
+        }
+
+        .lesson-nav button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .lesson-nav button:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+
+        .lesson-nav button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            font-size: 0.8em;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="topbar">
+        <div class="logo">MLN122</div>
+        <div class="menu-top">
+            <a href="index.html"><i class="fas fa-home"></i> Trang chủ</a>
+
+            <a href="slides.html" class="active"><i class="fas fa-book"></i> Nội dung</a>
+
+            <a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot học tập</a>
+        </div>
+        <div class="actions">
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sidebar-content">
+            <h3><i class="fas fa-list-alt"></i> Mục lục</h3>
+            <ul id="menu">
+                <li class="active" data-target="section1"><i class="fas fa-circle"></i> 1. Trang bìa & Bối cảnh Toàn cầu
+                </li>
+                <li data-target="section2"><i class="fas fa-circle"></i> 2. Khái niệm và Bản chất Đứt gãy Công nghệ</li>
+                <li data-target="section3"><i class="fas fa-circle"></i> 3. CNH, HĐH và Vai trò của CMCN</li>
+                <li data-target="section4"><i class="fas fa-circle"></i> 4. Tính tất yếu của CNH, HĐH ở Việt Nam</li>
+                <li data-target="section5"><i class="fas fa-circle"></i> 5. Thực tiễn & Hạn chế Nội tại (Biểu hiện Đứt gãy)</li>
+                <li data-target="section6"><i class="fas fa-circle"></i> 6. Tác động Tích cực (Cơ hội)</li>
+                <li data-target="section7"><i class="fas fa-circle"></i> 7. Tác động Tiêu cực (Rủi ro)</li>
+                <li data-target="section8"><i class="fas fa-circle"></i> 8. Giải pháp 1: R&D, Nhân lực & Công nghiệp hỗ trợ</li>
+                <li data-target="section9"><i class="fas fa-circle"></i> 9. Giải pháp 2: Thể chế & Phát triển Bền vững </li>
+                <li data-target="section10"><i class="fas fa-circle"></i> 10. Kết luận & Định hướng Chiến lược</li>
+            </ul>
+
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <p style="font-size: 13px; color: #888; text-align: center;">Chương trình học phần MLN122</p>
+        
+        </div>
+    </div>
+    <div class="content-wrapper">
+        <div class="main-content">
+
+            <div class="lesson-header">
+                <h1>Đứt gãy công nghệ và hệ quả của nó</h1>
+                <p>Tác động đến Công nghiệp hóa, Hiện đại hóa (CNH, HĐH) ở Việt Nam</p>
+                </div>
+           
+            <div class="main-progress-container">
+                <div class="main-progress" id="progress"></div>
+                </div>
+            <div class="progress-text"><span id="current-lesson-index">1</span>/<span
+                    id="total-lessons">10</span></div>
+
+
+            <div id="section1" class="section">
+                <h3>1. Trang bìa & Bối cảnh Toàn cầu</h3>
+
+                <h4>Bối cảnh: Cách mạng Công nghiệp 4.0 (CMCN 4.0)</h4>
+                <p>Thế giới đang chứng kiến những bước tiến công nghệ với tốc độ và quy mô chưa từng có.</p>
+                <ul>
+                    <li>Công nghệ cốt lõi: Trí tuệ nhân tạo (AI), Big Data, IoT, Robot thông minh.</li>
+                    <li>CMCN 4.0 thúc đẩy sự tái cấu trúc vị thế cạnh tranh toàn cầu.</li>
+                </ul>
+        
+                <h4>Tái cấu trúc Vị thế Cạnh tranh</h4>
+                <ul>
+                    <li>Quốc gia làm chủ công nghệ lõi và hệ sinh thái sáng tạo sẽ có lợi thế lớn.</li>
+                    <li>Nền kinh tế yếu dễ rơi vào "đầu tư hộp đen", chỉ gia công với giá trị gia tăng thấp.
+                    </li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/7.jpg"
+                        alt="Sơ đồ minh họa khoảng cách công nghệ giữa các quốc gia." style="max-width: 80%;">
+                    <p class="image-caption">Minh họa về khoảng cách công nghệ toàn cầu.</p>
+                </div>
+            </div>
+            <div id="section2" class="section" style="display:none;">
+                <h3>2. Khái niệm và Bản chất Đứt gãy Công nghệ</h3>
+
+                <h4>A. Khái niệm “Đứt gãy công nghệ”</h4>
+                <p>Là khoảng cách ngày càng gia tăng không chỉ về trình độ mà còn về khả năng hấp thụ, làm chủ và
+                    đổi mới công nghệ.</p>
+                <ul>
+                    <li>Biểu hiện: Giữa các quốc gia, vùng miền, ngành nghề, và giữa doanh nghiệp FDI với nội địa.
+                    </li>
+                </ul>
+
+                <h4>B. Bản chất sâu xa (Góc nhìn Mác – Lênin)</h4>
+                <ul>
+                    <li>Phản ánh sự khác biệt về Năng lực tổ chức, vốn nhân lực, Thể chế, hệ thống R&D.</li>
+                    <li>Là biểu hiện của mâu thuẫn biện chứng giữa Lực lượng sản xuất (công nghệ) phát triển
+                        nhanh và Quan hệ sản xuất, thể chế trong nước chưa kịp thích ứng.</li>
+                    <li>Đòi hỏi điều chỉnh chính sách và phát triển năng lực nội sinh.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                <img src="images/6.jpg" 
+                    alt="Sơ đồ mối quan hệ biện chứng giữa Lực lượng Sản xuất và Quan hệ Sản xuất." style="max-width: 80%;">
+                <p class="image-caption">Bản chất mâu thuẫn giữa Lực lượng Sản xuất và Quan hệ Sản xuất (Quan điểm MLN).</p>
+            </div>
+            </div>
+
+            <div id="section3" class="section" style="display:none;">
+                <h3>3. CNH, HĐH và Vai trò của CMCN</h3>
+
+                <h4>A. Vai trò của Cách mạng Công nghiệp (CMCN)</h4>
+                <ul>
+                    <li>Định nghĩa: Quá trình phát triển nhảy vọt về lực lượng sản xuất, thay đổi căn bản nền
+                        tảng kỹ thuật và phương thức sản xuất.</li>
+                    <li>CMCN là "bước ngoặt vĩ đại" trong lịch sử phát triển.</li>
+                </ul>
+
+                <h4>B. Tổng Hợp Các Cuộc CMCN</h4>
+    <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+            <tr style="background-color: #007bff; color: white;">
+                <th style="padding: 10px; border: 1px solid #ddd;">CMCN</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Thời điểm</th>
+                <th style="padding: 10px; border: 1px solid #ddd;">Nền tảng Công nghệ Chính</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">1.0</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Cuối TK 18</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Hơi nước, Cơ khí hóa</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">2.0</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Đầu TK 20</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Điện năng, Dây chuyền sản xuất hàng loạt</td>
+            </tr>
+            <tr style="background-color: #f9f9f9;">
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">3.0</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Cuối TK 20</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Điện tử, Tin học, Tự động hóa</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">4.0</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Hiện nay</td>
+                <td style="padding: 10px; border: 1px solid #ddd;">Hội tụ Kỹ thuật số, Vật lý, Sinh học (AI, IoT, Big Data)</td>
+            </tr>
+        </tbody>
+    </table>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/9.jpg" alt="Sơ đồ tiến trình 4 cuộc cách mạng công nghiệp"
+                        style="max-width: 80%;">
+                    <p class="image-caption">Tiến trình phát triển các cuộc Cách mạng Công nghiệp.</p>
+                </div>
+                <h4>C. Tổng quan về Các Mô hình CNH trên Thế giới</h4>
+                <ul>
+                    <li>Mô hình Cổ điển (Tây Âu, Bắc Mỹ): Phát triển từ nông nghiệp lên công nghiệp nhẹ, rồi công nghiệp nặng; diễn ra chậm rãi qua nhiều thế kỷ.</li>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <img src="images/2.jpg" 
+                        alt="Sơ đồ mô hình công nghiệp hóa cổ điển." style="max-width: 80%;">
+                        <p class="image-caption">Mô hình CNH Cổ điển.</p>
+                    </div>
+                    <li>Mô hình XHCN (Liên Xô cũ): Ưu tiên công nghiệp nặng, bỏ qua giai đoạn nông nghiệp và công nghiệp nhẹ, dẫn đến mất cân đối.</li>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <img src="images/3.jpg" 
+                        alt="Sơ đồ mô hình công nghiệp hóa xã hội chủ nghĩa." style="max-width: 80%;">
+                        <p class="image-caption">Mô hình CNH Xã hội Chủ nghĩa (ưu tiên công nghiệp nặng).</p>
+                    </div>
+                    <li>Mô hình Đông Á (Hàn Quốc, Nhật Bản): Tận dụng lợi thế đi sau, kết hợp ưu tiên chiến lược và định hướng xuất khẩu, áp dụng công nghệ mới để rút ngắn thời gian.</li>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <img src="images/1.png" 
+                        alt="Sơ đồ mô hình công nghiệp hóa Đông Á." style="max-width: 80%;">
+                        <p class="image-caption">Mô hình CNH Đông Á (rút ngắn thời gian).</p>
+                    </div>
+                    <li>Việt Nam: Cần học hỏi kinh nghiệm Đông Á, áp dụng mô hình CNH rút ngắn, dựa trên tri thức và công nghệ 4.0.</li>
+                </ul>
+                </div>
+            <div id="section4" class="section" style="display:none;">
+                <h3>4. Tính tất yếu của CNH, HĐH ở Việt Nam</h3>
+
+                <h4>A. Khái niệm CNH, HĐH</h4>
+                <p>Là quá trình chuyển đổi toàn diện kinh tế – xã hội sang sử dụng phổ biến công nghệ hiện đại, nhằm đạt
+                    năng suất lao động xã hội cao.</p>
+                <ul>
+                    <li>Bản chất: Quá trình xã hội, gắn liền với phát triển LLSX và điều chỉnh QHSX.</li>
+                </ul>
+
+                <h4>B. Tính tất yếu và Nội dung cốt lõi</h4>
+                <ul>
+                    <li>Yêu cầu khách quan của quá trình xây dựng CNXH.</li>
+                    <li>Mục tiêu: Giải quyết mâu thuẫn giữa nhu cầu xã hội tăng và trình độ sản xuất thấp.</li>
+                    <li>Nội dung cốt lõi: Phát triển công nghiệp và dịch vụ hiện đại; ứng dụng mạnh mẽ khoa học –
+                        công nghệ; phát triển kinh tế tri thức.</li>
+                    <li>Phải gắn với thực hiện tiến bộ và công bằng xã hội.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                <img src="images/10.jpg" 
+                    alt="Biểu đồ minh họa chi tiêu R&D của Việt Nam so với các nước khác." style="max-width: 80%;">
+                <p class="image-caption">Chi tiêu R&D thấp là một biểu hiện của đứt gãy công nghệ nội tại.</p>
+                </div>
+            </div>
+
+            <div id="section5" class="section" style="display:none;">
+                <h3>5. Thực tiễn & Hạn chế Nội tại (Biểu hiện Đứt gãy)</h3>
+
+                <h4>A. Thành tựu từ CNH, HĐH & Hội nhập</h4>
+                <ul>
+                    <li>Tăng trưởng GDP cao, thu hút FDI lớn.</li>
+                    <li>Chuyển dịch cơ cấu kinh tế (Tỷ trọng công nghiệp tăng).</li>
+                </ul>
+
+                <h4>B. Hạn chế Nội tại (Biểu hiện Đứt gãy rõ rệt)</h4>
+                <ul>
+                    <li>Năng lực R&D thấp: Chi cho R&D/GDP chỉ khoảng 0.5%.</li>
+                    <li>Tỷ lệ nội địa hóa thấp, công nghiệp hỗ trợ yếu.</li>
+                    <li>Doanh nghiệp nội địa yếu (SME), năng lực đổi mới hạn chế.</li>
+                    <li>Hiệu ứng lan tỏa công nghệ yếu: Khoảng cách lớn giữa FDI và nội địa.</li>
+                    <li>Phụ thuộc vào công nghệ nhập khẩu.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                <img src="images/11.jpg" 
+                    alt="Biểu đồ minh họa chi tiêu R&D của Việt Nam so với các nước khác." style="max-width: 80%;">
+                <p class="image-caption">Chi tiêu R&D thấp là một biểu hiện của đứt gãy công nghệ nội tại.</p>
+            </div>
+            </div>
+
+            <div id="section6" class="section" style="display:none;">
+                <h3>6. Tác động Tích cực (Cơ hội)</h3>
+
+                <p>CMCN 4.0 là động lực thúc đẩy CNH, HĐH nhảy vọt và cơ hội "đi tắt đón đầu".</p>
+
+                <h4>A. Thúc đẩy chuyển đổi mô hình tăng trưởng</h4>
+                <ul>
+                    <li>Chuyển từ chiều rộng (lao động rẻ) sang chiều sâu (tri thức, công nghệ).</li>
+                    <li>Tạo ra các ngành nghề mới (Fintech, AI, năng lượng tái tạo).</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/12.jpg" 
+                    alt="Hình ảnh minh họa các công nghệ lõi của CMCN 4.0 như AI, Big Data." style="max-width: 80%;">
+                    <p class="image-caption">Các công nghệ lõi như AI, IoT mở ra cơ hội chuyển đổi mô hình tăng trưởng.</p>
+                </div>
+
+                <h4>B. Tăng năng suất và hiệu quả quản trị</h4>
+                <ul>
+                    <li>Tự động hóa và số hóa tăng năng suất lao động.</li>
+                    <li>Hình thành và phát triển kinh tế số.</li>
+                    <li>Ứng dụng Chính phủ điện tử và Big Data nâng cao hiệu quả quản lý.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/13.jpg" 
+                    alt="Hình ảnh minh họa một nhà máy thông minh với tự động hóa và robot." style="max-width: 80%;">
+                    <p class="image-caption">Tự động hóa (Smart Factory) giúp tăng năng suất và hiệu quả sản xuất.</p>
+                </div>
+            </div>
+
+            <div id="section7" class="section" style="display:none;">
+                <h3>7. Tác động Tiêu cực (Rủi ro)</h3>
+
+                <h4>Nguy cơ Tụt hậu và Bất bình đẳng Xã hội</h4>
+
+                <ul>
+                    <li>Phân tầng chuỗi giá trị: Doanh nghiệp nội địa chỉ gia công lắp ráp với giá trị gia
+                        tăng thấp.</li>
+                    <li>Nguy cơ Bẫy Công nghệ Trung bình: Dừng lại ở giai đoạn tiếp nhận/gia công, dẫn đến tụt
+                        hậu và gia tăng phụ thuộc công nghệ nhập khẩu.</li>
+                    <li>Khoảng cách kỹ năng và Thất nghiệp cơ cấu: Tự động hóa thay thế lao động giản đơn, làm
+                        tăng bất bình đẳng thu nhập.</li>
+                    <li>Nguy cơ "Bãi thải công nghệ": Tiếp nhận thiết bị, công nghệ lạc hậu, gây ô nhiễm môi
+                        trường.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/2.png" 
+                    alt="Sơ đồ minh họa tự động hóa thay thế lao động giản đơn." style="max-width: 80%;">
+                    <p class="image-caption">Tự động hóa gây ra Thất nghiệp cơ cấu và gia tăng bất bình đẳng.</p>
+                </div>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/13.jpg" 
+                    alt="Hình ảnh minh họa bãi thải điện tử (e-waste)." style="max-width: 80%;">
+                    <p class="image-caption">Nguy cơ "Bãi thải công nghệ" khi tiếp nhận thiết bị, công nghệ lạc hậu, gây ô nhiễm.</p>
+                </div>
+            </div>
+
+            <div id="section8" class="section" style="display:none;">
+                <h3>8. Giải pháp 1: R&D, Nhân lực & Công nghiệp hỗ trợ</h3>
+
+                <p>Tập trung vào phát triển năng lực nội sinh và tự chủ công nghệ.</p>
+
+                <h4>1. Phát triển Năng lực Tự chủ Công nghệ & Đổi mới Sáng tạo</h4>
+                <ul>
+                    <li>Tăng cường đầu tư R&D: Mục tiêu 1-1.5% GDP.</li>
+                    <li>Tài chính cho đổi mới: Tạo quỹ mạo hiểm công-tư, cơ chế thử nghiệm (sandbox).</li>
+                    <li>Xây dựng hệ sinh thái: Hợp tác đại học – viện – doanh nghiệp; xác định ngành mũi nhọn (AI,
+                        bán dẫn).</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/15.jpg" 
+                    alt="Sơ đồ cơ chế hoạt động của đổi mới sáng tạo, từ R&D đến thị trường hóa." style="max-width: 80%;">
+                    <p class="image-caption">Cơ chế hoạt động của Đổi mới Sáng tạo: Cần kết nối R&D, chuyển giao kiến thức và thương mại hóa.</p>
+                </div>
+
+                <h4>2. Phát triển Nguồn Nhân lực Chất lượng cao</h4>
+                <ul>
+                    <li>Cải tổ giáo dục: Hướng mạnh vào STEM và kỹ năng số.</li>
+                    <li>Đào tạo liên tục: Triển khai chương trình reskilling/upskilling quy mô lớn.</li>
+                </ul>
+
+                <h4>3. Phát triển Công nghiệp Hỗ trợ và Hạ tầng số</h4>
+                <ul>
+                    <li>Công nghiệp hỗ trợ: Xây dựng cụm công nghiệp để tăng tỷ lệ nội địa hóa.</li>
+                    <li>Liên kết FDI: Áp dụng lộ trình chuyển giao công nghệ có điều kiện.</li>
+                </ul>
+                
+            </div>
+
+            <div id="section9" class="section" style="display:none;">
+                <h3>9. Giải pháp 2: Thể chế & Phát triển Bền vững</h3>
+
+                <h4>4. Hoàn thiện Thể chế Kinh tế Thị trường XHCN</h4>
+                <ul>
+                    <li>Cải cách hành chính và chống tham nhũng: Tạo môi trường cạnh tranh lành mạnh.</li>
+                    <li>Bảo vệ Sở hữu Trí tuệ: Tăng cường xây dựng và thực thi nghiêm minh quyền SHTT để khuyến khích sáng tạo.</li>
+                    <li>Quản trị rủi ro công nghệ: Kiểm soát chặt chẽ, ngăn chặn nhập khẩu thiết bị, công nghệ lạc hậu, tránh nguy cơ "bãi thải công nghệ"</li>
+                    <li>Thu hút FDI có chọn lọc: Ưu tiên dự án công nghệ cao, thân thiện môi trường và có lộ trình chuyển giao công nghệ.</li>
+                </ul>
+
+                <h4>5. Bảo đảm Phát triển Bền vững và Công bằng Xã hội</h4>
+                <ul>
+                    <li>Công nghệ xanh: Ưu tiên công nghệ xanh, phát triển kinh tế tuần hoàn.</li>
+                    <li>Trách nhiệm môi trường: Đánh giá tác động môi trường chặt chẽ.</li>
+                    <li>Công bằng xã hội: Đầu tư công nghệ cho vùng sâu, vùng xa để giảm bất bình đẳng.</li>
+                </ul>
+                <div style="text-align: center; margin: 20px 0;">
+                    <img src="images/16.jpg" 
+                    alt="Sơ đồ mô hình cơ chế đổi mới sáng tạo trong môi trường chính sách." style="max-width: 80%;">
+                    <p class="image-caption">Thể chế (Môi trường chính sách) phải thúc đẩy toàn bộ quá trình Đổi mới Sáng tạo.</p>
+                </div>
+                
+            </div>
+
+            <div id="section10" class="section" style="display:none;">
+                <h3>10. Kết luận & Định hướng Chiến lược</h3>
+
+                <h4>Kết luận</h4>
+                <ul>
+                    <li>CNH, HĐH là con đường tất yếu xây dựng cơ sở vật chất – kỹ thuật vững mạnh.</li>
+                    <li>Đứt gãy công nghệ là thách thức chiến lược, phản ánh mâu thuẫn giữa lực lượng sản xuất toàn
+                        cầu và năng lực nội sinh chưa thích ứng.</li>
+                </ul>
+
+                <h4>Định hướng Chiến lược</h4>
+                <ul>
+                    <li>Chuyển đổi vai trò: Việt Nam cần chuyển từ "người nhận" sang "người làm chủ và kiến
+                        tạo công nghệ".</li>
+                    <li>Phương thức CNH, HĐH mới: Dựa trên tri thức, công nghệ và sáng tạo con người Việt Nam.
+                    </li>
+                </ul>
+
+                <div class="note"
+                    style="background-color: #d4edda; border-left: 5px solid #28a745; padding: 15px; margin-top: 20px; font-style: italic;">
+                    <p>Giải quyết đứt gãy công nghệ là chìa khóa xây dựng xã hội thịnh vượng, công bằng, văn minh
+                        theo định hướng xã hội chủ nghĩa.</p>
+                </div>
+            </div>
+
+            <div class="lesson-nav">
+                <button id="prev-btn" class="prev-btn" disabled><i class="fas fa-chevron-left"></i> Bài trước</button>
+                <div class="current-page">Nội dung <span id="current-lesson-nav">1</span>/10</div>
+                <button id="next-btn" class="next-btn">Bài tiếp <i class="fas fa-chevron-right"></i></button>
+            </div>
+
+        </div>
+        <footer>© 2025 - HienNTP | Tài liệu học phần MLN122</footer>
+    </div>
+
+    <script>
+        const menuItems = document.querySelectorAll("#menu li");
+        const sections = document.querySelectorAll(".section");
+        const progress = document.getElementById("progress");
+        const prevBtn = document.getElementById("prev-btn");
+        const nextBtn = document.getElementById("next-btn");
+        const currentLessonIndexDisplay = document.getElementById("current-lesson-index");
+        const currentLessonNavDisplay = document.getElementById("current-lesson-nav");
+        const totalLessonsDisplay = document.getElementById("total-lessons");
+
+        const totalLessons = menuItems.length;
+        // Cập nhật tổng số bài học
+        totalLessonsDisplay.textContent = totalLessons;
+
+        let currentSectionIndex = 0;
+
+        function updateLesson(newIndex) {
+            // Guard clause for boundary checks
+            if (newIndex < 0 || newIndex >= totalLessons) return;
+
+            currentSectionIndex = newIndex;
+
+            // Update active menu item
+            menuItems.forEach(i => i.classList.remove("active"));
+            menuItems[currentSectionIndex].classList.add("active");
+
+            // Update content section visibility
+            sections.forEach(sec => sec.style.display = "none");
+            document.getElementById(menuItems[currentSectionIndex].dataset.target).style.display = "block";
+
+            // Update progress bar
+            let progressPercentage = ((currentSectionIndex + 1) / totalLessons) * 100;
+
+            progress.style.width = progressPercentage + "%";
+
+
+            // Update navigation text
+            currentLessonIndexDisplay.textContent = currentSectionIndex + 1;
+            currentLessonNavDisplay.textContent = currentSectionIndex + 1;
+
+            // Update navigation buttons state
+            prevBtn.disabled = currentSectionIndex === 0;
+            nextBtn.disabled = currentSectionIndex === totalLessons - 1;
+
+            // Cuộn về đầu trang sau khi chuyển bài
+            document.querySelector('.content-wrapper').scrollTo(0, 0);
+        }
+
+        // Event listeners for menu items
+        menuItems.forEach((item, index) => {
+            item.addEventListener("click", () => {
+                updateLesson(index);
+            });
+        });
+
+        // Event listeners for navigation buttons
+        prevBtn.addEventListener("click", () => {
+            updateLesson(currentSectionIndex - 1);
+        });
+
+        nextBtn.addEventListener("click", () => {
+            updateLesson(currentSectionIndex + 1);
+        });
+
+        // Initialize the first lesson view
+        updateLesson(0);
+    </script>
+</body>
+
+</html>

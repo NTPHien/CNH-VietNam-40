@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Chuyên gia AI - CNH 4.0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* Định nghĩa biến màu (Phong cách Sáng - Purple/Blue Theme) */
+        :root {
+            --bg-page: #f6f7fb; /* Nền trang học tập chung */
+            --surface-card: #ffffff;
+            --text-dark: #2c3e50;
+            --accent-primary: #4a00e0; /* Tím đậm (theo theme MLN122) */
+            --accent-secondary: #8e2de2; /* Tím nhạt hơn */
+            --user-bubble: #e6e9ff; /* Màu bubble người dùng mới, gần với màu theme */
+            --expert-bubble: #f1f0f0; /* Xám nhạt cho AI */
+            --link-color: #3498db;
+            --orange-action: #ff6600; /* Màu cam cho nút hành động chính (tương tự hình mẫu) */
+        }
+
+        /* --- CẤU TRÚC CHUNG --- */
+        body {
+            background-color: var(--bg-page); 
+            color: var(--text-dark);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column; /* Quan trọng để căn chỉnh nội dung chính */
+            align-items: center; /* Căn giữa nội dung chính */
+        }
+
+        /* Container chính cho toàn bộ nội dung */
+        .main-container {
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+            margin-top: 55px; /* Đẩy xuống dưới Top Bar */
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- TOP BAR CỐ ĐỊNH (Đã Tối ưu hóa) --- */
+        .topbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 55px;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Đảm bảo logo, menu và actions nằm 2 bên */
+            padding: 0 40px; 
+            z-index: 1000;
+        }
+
+        .topbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--accent-primary);
+            flex-shrink: 0; /* Ngăn logo bị co lại */
+        }
+
+        .topbar .menu-top {
+            display: flex;
+            gap: 10px; 
+            align-items: center;
+            flex-grow: 1; /* Cho phép menu giãn ra để căn giữa */
+            justify-content: center; /* Căn giữa các mục menu */
+            margin: 0 40px; /* Thêm margin để cách xa logo và actions */
+        }
+
+        .topbar .menu-top a {
+            text-decoration: none;
+            color: #555;
+            padding: 8px 15px;
+            font-size: 14px;
+            transition: color 0.2s, background-color 0.2s;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar .menu-top a i {
+            margin-right: 5px;
+        }
+
+        .topbar .menu-top a:hover {
+            color: var(--accent-primary);
+        }
+
+        .topbar .menu-top a.active {
+            color: var(--accent-primary);
+            font-weight: 500;
+            background-color: #ede7ff; /* Màu nền tím nhạt cho tab active */
+        }
+        
+        /* Nút Hành động (Actions) bên phải */
+        .topbar .actions {
+            flex-shrink: 0;
+        }
+        .topbar .actions a.action-button {
+            background-color: var(--orange-action);
+            color: white;
+            padding: 8px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .topbar .actions a.action-button:hover {
+            background-color: #cc5200; 
+        }
+
+        /* HEADER - Vùng chứa tiêu đề */
+        .hero-section {
+            background-color: var(--surface-card);
+            border-radius: 12px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-section h1 {
+            font-size: 1.8rem;
+            color: var(--accent-primary);
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        .hero-section p {
+            color: #666;
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        /* Chatbot Container */
+        .chatbot-container {
+            width: 100%;
+            background-color: var(--surface-card);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 150px); 
+            min-height: 500px;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+        
+        /* Header Chat */
+        .chat-header {
+            background-color: var(--accent-primary);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Body Chat (Lịch sử) */
+        .chat-body {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: var(--bg-page); 
+        }
+        
+        /* Cuộn bar kiểu Light Mode (Giữ nguyên) */
+        .chat-body::-webkit-scrollbar { width: 8px; }
+        .chat-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 10px; }
+        .chat-body::-webkit-scrollbar-thumb:hover { background: #bbb; }
+
+        /* Tin nhắn */
+        .message { margin-bottom: 15px; display: flex; }
+        .user-message { justify-content: flex-end; }
+        .expert-message { justify-content: flex-start; }
+
+        .message-bubble {
+            max-width: 85%; padding: 12px 18px; border-radius: 18px; line-height: 1.6;
+            font-size: 1rem; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); word-wrap: break-word;
+        }
+
+        .user-message .message-bubble { 
+            background-color: var(--user-bubble); color: var(--text-dark); font-weight: 500;
+            border-bottom-right-radius: 4px;
+        }
+
+        .expert-message .message-bubble { 
+            background-color: var(--expert-bubble); color: var(--text-dark); border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        /* Loading Indicator & Input Area (Giữ nguyên) */
+        .chat-input {
+            display: flex; padding: 15px; border-top: 1px solid #ddd;
+            background-color: var(--surface-card);
+            border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;
+        }
+        .chat-input input {
+            flex-grow: 1; padding: 12px; border: 1px solid #ccc;
+            background-color: white; color: var(--text-dark); border-radius: 8px;
+            font-size: 1em; outline: none; transition: border-color 0.3s;
+            margin-right: 10px;
+        }
+        .chat-input input:focus { border-color: var(--accent-primary); }
+        
+        .chat-input button {
+            background-color: var(--accent-primary); color: white; border: none;
+            padding: 12px 20px; border-radius: 8px; cursor: pointer;
+            transition: background-color 0.3s; font-size: 1.2rem;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .chat-input button:hover {
+            background-color: var(--accent-secondary);
+        }
+
+        /* Citing Sources Style */
+        .sources-list {
+            margin-top: 10px; padding-top: 5px; border-top: 1px solid #eee;
+            font-size: 0.8rem; color: #777;
+        }
+        .sources-list a {
+            color: var(--link-color); text-decoration: none; display: block; margin-top: 3px;
+        }
+        .sources-list a:hover { text-decoration: underline; }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .topbar { padding: 0 20px; }
+            .topbar .logo { margin-right: 10px; }
+            .topbar .menu-top { margin: 0 10px; gap: 5px; }
+            .topbar .menu-top a { padding: 8px 10px; }
+            .main-container { padding: 10px; margin-top: 55px; }
+            .chatbot-container { height: 80vh; min-height: 400px; }
+            /* Điều chỉnh kích thước nút hành động */
+            .topbar .actions a.action-button { padding: 6px 12px; font-size: 13px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+    <div class="logo">MLN122</div>
+    <div class="menu-top">
+        <a href="index.html"><i class="fas fa-home"></i> Trang chủ</a> 
+        <a href="slides.html"><i class="fas fa-book"></i> Nội dung</a>
+        <a href="chatbot.html" class="active"><i class="fas fa-robot"></i> Chatbot học tập</a>
+    </div>
+</div>
+
+    <div class="main-container">
+        <main class="w-full">
+            <div class="hero-section">
+                <h1>💬 HỎI ĐÁP CÙNG CHUYÊN GIA AI VỀ CNH 4.0</h1>
+                <p>Đặt câu hỏi về cơ sở lý luận Mác-Lênin, tác động của CMCN 4.0 và định hướng phát triển bền vững của Việt Nam. Chuyên gia sẽ tìm kiếm thông tin mới nhất để trả lời.</p>
+            </div>
+
+            <div class="chatbot-container">
+                <div class="chat-header">
+                    <span id="expert-status">Chuyên gia AI đã sẵn sàng!</span>
+                </div>
+                <div class="chat-body" id="chat-history">
+                    <div class="message expert-message">
+                        <div class="message-bubble">
+                            Xin chào! Tôi là Chuyên gia AI được đào tạo để phân tích CNH, HĐH Việt Nam theo lý luận Kinh tế Chính trị Mác-Lênin. Hãy đặt câu hỏi của bạn! Ví dụ: **"CMCN 4.0 tác động thế nào đến cơ cấu lao động ở Việt Nam?"**
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Nhập câu hỏi của bạn..." onkeypress="handleKeyPress(event)">
+                    <button id="send-button" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script>
+        const chatHistory = document.getElementById('chat-history');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+        const expertStatus = document.getElementById('expert-status');
+        // Vui lòng thay thế bằng API Key hợp lệ của bạn.
+        const apiKey = "AIzaSyCKuGdarcp1eucPbzcI-5pKQ4PVgckVh9g"; 
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+
+        // Hàm xử lý khi nhấn Enter
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        // Helper function để hiển thị tin nhắn vào UI
+        function displayMessage(text, role, sources = []) {
+            const sourceHtml = sources.length > 0
+                ? `<div class="sources-list"><strong>Nguồn thông tin:</strong> ${sources.map(s => `<a href="${s.uri}" target="_blank" rel="noopener noreferrer">${s.title || s.uri}</a>`).join('')}</div>`
+                : '';
+            
+            const messageClass = role === 'user' ? 'user-message' : 'expert-message';
+            const html = `
+                <div class="message ${messageClass}">
+                    <div class="message-bubble">
+                        ${text.replace(/\n/g, '<br>')}
+                        ${sourceHtml}
+                    </div>
+                </div>
+            `;
+            chatHistory.innerHTML += html;
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        // Helper function để thêm/xóa trạng thái loading
+        let loadingElement = null;
+        function showLoading() {
+            expertStatus.textContent = "AI đang tìm kiếm và phân tích...";
+            sendButton.disabled = true;
+            userInput.disabled = true;
+            userInput.placeholder = "Đang chờ phản hồi...";
+
+            loadingElement = document.createElement('div');
+            loadingElement.classList.add('message', 'expert-message');
+            loadingElement.innerHTML = `
+                <div class="message-bubble loading-dots">
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                    <div class="loading-dot"></div>
+                </div>
+            `;
+            chatHistory.appendChild(loadingElement);
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        }
+
+        function hideLoading() {
+            expertStatus.textContent = "Chuyên gia AI đã sẵn sàng!";
+            sendButton.disabled = false;
+            userInput.disabled = false;
+            userInput.placeholder = "Nhập câu hỏi của bạn...";
+
+            if (loadingElement) {
+                loadingElement.remove();
+                loadingElement = null;
+            }
+        }
+
+        // Logic gọi API và xử lý phản hồi
+        async function fetchAIResponse(userQuery) {
+            const systemPrompt = "Bạn là Chuyên gia AI chuyên về Kinh tế Chính trị Mác-Lênin và Công nghiệp hóa, Hiện đại hóa ở Việt Nam trong kỷ nguyên 4.0. Nhiệm vụ của bạn là cung cấp các câu trả lời chính xác, sâu sắc, có tính thời sự và phải dựa trên thông tin tìm kiếm thực tế (grounding). Phản hồi phải bằng tiếng Việt, thân thiện và có tính học thuật.";
+            
+            const payload = {
+                contents: [{ role: "user", parts: [{ text: userQuery }] }],
+                tools: [{ "google_search": {} }], 
+                systemInstruction: {
+                    parts: [{ text: systemPrompt }]
+                },
+            };
+
+            let attempts = 0;
+            const maxAttempts = 3;
+
+            while (attempts < maxAttempts) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) {
+                        if (response.status >= 500) {
+                            throw new Error(`Server error: HTTP status ${response.status}`);
+                        } else {
+                            // Lỗi 4xx, không thử lại
+                            return { text: `Xin lỗi, yêu cầu của bạn gặp lỗi (Mã: ${response.status}). Vui lòng kiểm tra lại câu hỏi hoặc API key.`, sources: [] };
+                        }
+                    }
+
+                    const result = await response.json();
+                    const candidate = result.candidates?.[0];
+
+                    if (candidate && candidate.content?.parts?.[0]?.text) {
+                        const text = candidate.content.parts[0].text;
+                        let sources = [];
+                        
+                        const groundingMetadata = candidate.groundingMetadata;
+                        if (groundingMetadata && groundingMetadata.groundingAttributions) {
+                            sources = groundingMetadata.groundingAttributions
+                                .map(attribution => ({
+                                        uri: attribution.web?.uri,
+                                        title: attribution.web?.title,
+                                    }))
+                                .filter(source => source.uri && source.title);
+                        }
+                        
+                        return { text, sources };
+                    } else {
+                        // Xử lý lỗi từ chối nội dung hoặc lỗi khác
+                         const safetyRatings = candidate?.safetyRatings;
+                         if (safetyRatings && safetyRatings.some(r => r.probability !== 'NEGLIGIBLE')) {
+                             return { text: "Xin lỗi, câu hỏi của bạn có vẻ không phù hợp với chính sách nội dung của tôi.", sources: [] };
+                         }
+                        return { text: "Xin lỗi, tôi không thể tạo ra phản hồi vào lúc này. Vui lòng thử lại.", sources: [] };
+                    }
+
+                } catch (error) {
+                    console.error(`Attempt ${attempts + 1} failed:`, error);
+                    attempts++;
+                    if (attempts < maxAttempts) {
+                        const delay = Math.pow(2, attempts) * 1000;
+                        await new Promise(resolve => setTimeout(resolve, delay));
+                    } else {
+                        return { text: "Xin lỗi, đã xảy ra lỗi kết nối sau nhiều lần thử. Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.", sources: [] };
+                    }
+                }
+            }
+        }
+
+        // Hàm chính gửi tin nhắn
+        async function sendMessage() {
+            const messageText = userInput.value.trim();
+            
+            if (messageText === "") return;
+            
+            // 1. Hiển thị tin nhắn người dùng
+            displayMessage(messageText, 'user');
+            
+            userInput.value = '';
+
+            // 2. Hiện loading và gọi API
+            showLoading();
+
+            try {
+                // Tách biệt việc gọi API
+                const { text, sources } = await fetchAIResponse(messageText);
+
+                // 3. Ẩn loading và hiển thị phản hồi AI
+                hideLoading();
+                displayMessage(text, 'model', sources);
+                
+            } catch (error) {
+                console.error("Lỗi trong quá trình gửi tin nhắn:", error);
+                hideLoading();
+                displayMessage("Đã xảy ra lỗi không xác định. Vui lòng kiểm tra console hoặc thử lại.", 'model');
+            }
+        }
+
+        // Tự động cuộn xuống cuối khi tải lần đầu
+        document.addEventListener('DOMContentLoaded', () => {
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+        });
+    </script>
+</body>
+</html>

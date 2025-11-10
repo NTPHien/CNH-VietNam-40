@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Công nghiệp hóa 4.0: Đổi mới, Bền vững và Phát triển Việt Nam</title>
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        /* CSS cho Top Bar (Đảm bảo đồng bộ và cố định) */
+        .topbar {
+            height: 55px;
+            background: #fff;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .topbar .logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: #4a00e0;
+        }
+        
+        .topbar .menu-top {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .topbar .menu-top a {
+            text-decoration: none;
+            color: #555;
+            padding: 8px 15px;
+            font-size: 14px;
+            transition: color 0.2s, background-color 0.2s;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .topbar .menu-top a i {
+            margin-right: 5px;
+        }
+        
+        .topbar .menu-top a.active {
+            color: #4a00e0;
+            font-weight: 500;
+            background-color: #ede7ff; 
+        }
+        
+        /* Thêm body/main-container để đảm bảo các thành phần nội dung không bị dính vào Top Bar */
+        body { margin: 0; font-family: 'Roboto', sans-serif; background-color: #f6f7fb; }
+        .main-container { padding-top: 40px; } /* Đẩy nội dung chính xuống */
+    </style>
+</head>
+
+<body>
+<div class="topbar">
+    <div class="logo">MLN122</div>
+    <div class="menu-top">
+        <a href="#" class="active"><i class="fas fa-home"></i> Trang chủ</a> 
+        <a href="slides.html"><i class="fas fa-book"></i> Nội dung</a>
+        <a href="chatbot.html"><i class="fas fa-robot"></i> Chatbot học tập</a>
+    </div>
+    <div class="actions">
+        </div>
+</div>
+
+<div class="main-container">
+    <main>
+        <div class="hero-section" style="background-image: url('images/nen-congnghe.jpg'); background-size: cover;">
+            <p class="project-meta">KINH TẾ CHÍNH TRỊ MÁC-LÊNIN</p>
+            <h1>CÔNG NGHIỆP HÓA VIỆT NAM TRONG KỶ NGUYÊN 4.0</h1>
+            <p>Vận dụng Lý luận Kinh tế Chính trị Mác-Lênin: Phân tích tác động và định hướng Phát triển Bền vững.</p>
+            
+            <div class="hero-navigation-buttons">
+                <a href="slides.html" class="button primary">
+                    📚 Nội dung
+                </a>
+                <a href="chatbot.html" class="button chat-button">
+                    💬 Chatbot học tập
+                </a>
+            </div>
+        </div>
+
+        <div class="comparison-section">
+            <h2>Hành Trình Công Nghiệp Hóa: Từ Giai đoạn Truyền thống đến 4.0</h2>
+            <div class="comparison-cards-wrapper">
+                
+                <div class="comparison-card">
+                    <img src="images/cnh-truyenthong.jpg" alt="CNH truyền thống Việt Nam">
+                    <div class="card-info">
+                        <span class="tag">Thế kỷ XX</span>
+                        <h3>CNH Truyền thống</h3>
+                        <p>Tập trung vào công nghiệp nặng, khai thác tài nguyên và thâm dụng lao động, dẫn đến nhiều thách thức về môi trường.</p>
+                    </div>
+                </div>
+                
+                <i class="fas fa-arrow-right arrow-icon"></i>
+
+                <div class="comparison-card">
+                    <img src="images/cnh-40.jpg" alt="CNH 4.0 Việt Nam">
+                    <div class="card-info">
+                        <span class="tag">Thế kỷ XXI</span>
+                        <h3>CNH trong Kỷ nguyên 4.0</h3>
+                        <p>Định hướng phát triển kinh tế số, công nghệ cao, tự động hóa, gắn với Đổi mới Sáng tạo và Phát triển Bền vững.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-box">
+            <p>Sẵn sàng khám phá những yêu cầu khách quan để thực hiện CNH thành công và bền vững?</p>
+            <a href="slides.html" class="button primary-btn">
+                📚 Nội dung
+            </a>
+            <a href="chatbot.html" class="button chat-button"> 
+                💬 Chatbot học tập
+            </a>
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
